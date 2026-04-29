@@ -1,8 +1,8 @@
-import Categories from '@/component/home/Categories'
-import FeaturedBooks from '@/component/home/FeaturedBooks'
-import HeroSection from '@/component/home/HeroSection'
-import Newsletter from '@/component/home/Newsletter'
-import Testimonials from '@/component/home/Testimonials'
+import Categories from '@/components/home/Categories'
+import FeaturedBooks from '@/components/home/FeaturedBooks'
+import HeroSection from '@/components/home/HeroSection'
+import Newsletter from '@/components/home/Newsletter'
+import Testimonials from '@/components/home/Testimonials'
 import React from 'react'
 
 function Home() {

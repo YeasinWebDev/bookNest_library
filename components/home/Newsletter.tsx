@@ -2,7 +2,7 @@
 
 export default function Newsletter() {
   return (
-    <section className="px-8 md:px-16 py-20">
+    <section className="px-8 md:px-16 py-20 bg-white">
       <div className="max-w-[1280px] mx-auto bg-[#3525cd] rounded-3xl p-10 md:p-16 text-center text-white relative overflow-hidden">
         <div className="relative z-10">
           <h2 className="text-4xl font-bold mb-4">Stay in the Loop</h2>
