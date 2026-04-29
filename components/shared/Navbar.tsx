@@ -53,16 +53,6 @@ export default function Navbar() {
           </Link>
           <Link 
             className={`text-sm font-medium transition-colors duration-200 border-b-2 ${
-              isActive("/categories")
-                ? "text-indigo-600 border-indigo-600"
-                : "text-slate-600 hover:text-indigo-500 border-transparent"
-            }`}
-            href="/categories"
-          >
-            Categories
-          </Link>
-          <Link 
-            className={`text-sm font-medium transition-colors duration-200 border-b-2 ${
               isActive("/about")
                 ? "text-indigo-600 border-indigo-600"
                 : "text-slate-600 hover:text-indigo-500 border-transparent"

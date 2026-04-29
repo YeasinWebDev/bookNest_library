@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="w-full py-12 px-8 md:px-16  gap-6 bg-slate-50 border-t border-slate-200">
@@ -11,21 +13,18 @@ export default function Footer() {
         </div>
 
         <div className="flex gap-4 lg:gap-8">
-          <a className="text-sm text-slate-500 hover:text-indigo-500 hover:underline underline-offset-4" href="#">
+          <Link className={`text-sm font-semibold py-1 border-b-2 transition-colors duration-200 `} href="/">
             Home
-          </a>
-          <a className="text-sm text-slate-500 hover:text-indigo-500 hover:underline underline-offset-4" href="#">
+          </Link>
+          <Link className={`text-sm font-medium transition-colors duration-200 border-b-2 `} href="/books">
             Books
-          </a>
-          <a className="text-sm text-slate-500 hover:text-indigo-500 hover:underline underline-offset-4" href="#">
-            Categories
-          </a>
-          <a className="text-sm text-slate-500 hover:text-indigo-500 hover:underline underline-offset-4" href="#">
+          </Link>
+          <Link className={`text-sm font-medium transition-colors duration-200 border-b-2 `} href="/about">
             About
-          </a>
-          <a className="text-sm text-slate-500 hover:text-indigo-500 hover:underline underline-offset-4" href="#">
+          </Link>
+          <Link className={`text-sm font-medium transition-colors duration-200 border-b-2 `} href="/contact">
             Contact
-          </a>
+          </Link>
         </div>
       </div>
 
