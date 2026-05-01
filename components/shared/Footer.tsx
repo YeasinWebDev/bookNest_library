@@ -13,16 +13,16 @@ export default function Footer() {
         </div>
 
         <div className="flex gap-4 lg:gap-8">
-          <Link className={`text-sm font-semibold py-1 border-b-2 transition-colors duration-200 `} href="/">
+          <Link className={`text-sm font-semibold `} href="/">
             Home
           </Link>
-          <Link className={`text-sm font-medium transition-colors duration-200 border-b-2 `} href="/books">
+          <Link className={`text-sm font-medium  `} href="/books">
             Books
           </Link>
-          <Link className={`text-sm font-medium transition-colors duration-200 border-b-2 `} href="/about">
+          <Link className={`text-sm font-medium  `} href="/about">
             About
           </Link>
-          <Link className={`text-sm font-medium transition-colors duration-200 border-b-2 `} href="/contact">
+          <Link className={`text-sm font-medium  `} href="/contact">
             Contact
           </Link>
         </div>

@@ -3,11 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter()
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -78,7 +79,7 @@ export default function Navbar() {
             search
           </button>
 
-          <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden border-2 border-indigo-100 hidden md:block">
+          <div onClick={() => router.push("/profile")} className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden border-2 border-indigo-100 hidden md:block">
             <Image
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs9wTNqfggS6zRHeFBirzFKrIi1qBB59mJ-TjAwB1ZVBXUpbqV-1raQggutL5RclM7Ag6Y5ZK693kNh-lc56laZJz2vtxsabVSx0q_uLl-ZY7ivJVvWke5SckXNZTQnZ3jNbTCqZ0J6329ha2VGg8ChO8z8a6NZn7VkY8uM2DYG4iKRdQ799jb2DkZ0bmsBNPWmpHpJ1fh4nxSGJDv5JhxE-9ByddAX8EvhOWoKcLHUWJh1oLCj5pdXuRDhmGL1yzKOB0uxFUyNs2I"
               alt="User profile"
