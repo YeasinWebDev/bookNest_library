@@ -39,7 +39,7 @@ export default function Testimonials() {
                   {Array(5)
                     .fill(0)
                     .map((_, i) => (
-                      <FaStar className="text-[#855300] size-4" />
+                      <FaStar key={i} className="text-[#855300] size-4" />
                     ))}
                 </div>
                 <div>

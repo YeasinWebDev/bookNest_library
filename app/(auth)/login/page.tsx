@@ -1,68 +1,83 @@
 "use client";
 
+import { loginUser } from "@/app/api/auth/route";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    remember: false
+    email: "",
+    password: "",
+    remember: false,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
+
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = "Please enter a valid email address";
     }
-    
+
     if (!formData.password.trim()) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setIsLoading(true);
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // const res = await fetch('/api/users/login', {
+      //   method: 'POST',
+      //   credentials: 'include',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(formData),
+      // });
+
+      // const data = await res.json();
+
+      // if (!res.ok) {
+      //   toast.error(data.message || 'Login failed');
+      //   return;
+      // }
+
+      await loginUser(formData.email, formData.password);
+
+      toast.success('Login successful');
+      router.push('/');
       
-      // For demo purposes, accept any email/password
-      console.log('Login successful:', formData);
-      
-      // Redirect to main page
-      router.push('/(main)');
     } catch (error) {
-      setErrors({ general: 'Login failed. Please try again.' });
+      toast.error('Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -85,7 +100,7 @@ export default function LoginPage() {
       {/* Main Content */}
       <main className="relative z-10 w-full max-w-md px-6 flex flex-col items-center">
         {/* Brand */}
-        <header onClick={()=> router.push('/')} className="mb-10 text-center cursor-pointer">
+        <header onClick={() => router.push("/")} className="mb-10 text-center cursor-pointer">
           <h1 className="text-4xl font-bold text-primary tracking-tighter mb-2">BookNest</h1>
 
           <p className="text-sm text-gray-800">Your sanctuary for discovery and research.</p>
@@ -100,11 +115,7 @@ export default function LoginPage() {
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* General Error */}
-            {errors.general && (
-              <div className="text-red-400 text-sm text-center bg-red-500/10 border border-red-500/20 rounded-lg p-3">
-                {errors.general}
-              </div>
-            )}
+            {errors.general && <div className="text-red-400 text-sm text-center bg-red-500/10 border border-red-500/20 rounded-lg p-3">{errors.general}</div>}
 
             {/* Email */}
             <div className="flex flex-col gap-2">
@@ -123,7 +134,7 @@ export default function LoginPage() {
                   value={formData.email}
                   onChange={handleInputChange}
                   className={`w-full pl-12 pr-4 py-3 bg-white/10 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all ${
-                    errors.email ? 'border-red-500/50' : 'border-white/20'
+                    errors.email ? "border-red-500/50" : "border-white/20"
                   }`}
                 />
               </div>
@@ -153,7 +164,7 @@ export default function LoginPage() {
                   value={formData.password}
                   onChange={handleInputChange}
                   className={`w-full pl-12 pr-12 py-3 bg-white/10 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all ${
-                    errors.password ? 'border-red-500/50' : 'border-white/20'
+                    errors.password ? "border-red-500/50" : "border-white/20"
                   }`}
                 />
 
@@ -170,13 +181,13 @@ export default function LoginPage() {
 
             {/* Remember */}
             <div className="flex items-center gap-3 px-1">
-              <input 
-                id="remember" 
+              <input
+                id="remember"
                 name="remember"
-                type="checkbox" 
+                type="checkbox"
                 checked={formData.remember}
                 onChange={handleInputChange}
-                className="w-5 h-5 rounded border-white/30 accent-primary cursor-pointer" 
+                className="w-5 h-5 rounded border-white/30 accent-primary cursor-pointer"
               />
               <label htmlFor="remember" className="text-sm text-muted-foreground cursor-pointer select-none">
                 Remember this device
@@ -195,7 +206,7 @@ export default function LoginPage() {
                   Signing In...
                 </>
               ) : (
-                'Sign In'
+                "Sign In"
               )}
             </button>
           </form>

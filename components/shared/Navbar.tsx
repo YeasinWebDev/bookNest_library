@@ -2,72 +2,82 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
+import { getProfile } from "@/app/api/profile/route";
+import { logoutUser } from "@/app/api/auth/route";
+import toast from "react-hot-toast";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter()
+  const [user, setUser] = useState(null);
+  const router = useRouter();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
+  const handleLogout = async() => {
+    await logoutUser();
+    toast.success("Logout successful");
+    router.push("/login");
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await getProfile();
+      setUser(res);
+    };
+
+    getData();
+  }, []);
+
+
   const isActive = (href: string) => {
     return pathname === href;
   };
+
+  console.log(user)
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 flex justify-center items-center px-8 md:px-16 h-20 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm shadow-indigo-500/5">
       <div className="max-w-container-max w-full flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <span className="material-symbols-outlined text-indigo-600 text-3xl">
-            library_books
-          </span>
-          <span className="text-2xl font-bold tracking-tighter text-indigo-600">
-            BookNest
-          </span>
+          <span className="material-symbols-outlined text-indigo-600 text-3xl">library_books</span>
+          <span className="text-2xl font-bold tracking-tighter text-indigo-600">BookNest</span>
         </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          <Link 
+          <Link
             className={`text-sm font-semibold py-1 border-b-2 transition-colors duration-200 ${
-              isActive("/")
-                ? "text-indigo-600 border-indigo-600"
-                : "text-slate-600 border-transparent hover:text-indigo-500"
+              isActive("/") ? "text-indigo-600 border-indigo-600" : "text-slate-600 border-transparent hover:text-indigo-500"
             }`}
             href="/"
           >
             Home
           </Link>
-          <Link 
+          <Link
             className={`text-sm font-medium transition-colors duration-200 border-b-2 ${
-              isActive("/books")
-                ? "text-indigo-600 border-indigo-600"
-                : "text-slate-600 hover:text-indigo-500 border-transparent"
+              isActive("/books") ? "text-indigo-600 border-indigo-600" : "text-slate-600 hover:text-indigo-500 border-transparent"
             }`}
             href="/books"
           >
             Books
           </Link>
-          <Link 
+          <Link
             className={`text-sm font-medium transition-colors duration-200 border-b-2 ${
-              isActive("/about")
-                ? "text-indigo-600 border-indigo-600"
-                : "text-slate-600 hover:text-indigo-500 border-transparent"
+              isActive("/about") ? "text-indigo-600 border-indigo-600" : "text-slate-600 hover:text-indigo-500 border-transparent"
             }`}
             href="/about"
           >
             About
           </Link>
-          <Link 
+          <Link
             className={`text-sm font-medium transition-colors duration-200 border-b-2 ${
-              isActive("/contact")
-                ? "text-indigo-600 border-indigo-600"
-                : "text-slate-600 hover:text-indigo-500 border-transparent"
+              isActive("/contact") ? "text-indigo-600 border-indigo-600" : "text-slate-600 hover:text-indigo-500 border-transparent"
             }`}
             href="/contact"
           >
@@ -76,12 +86,15 @@ export default function Navbar() {
         </nav>
 
         <div className="flex items-center gap-4">
-          <Button
-            onClick={() => router.push("/login")}
-            className="hidden md:block h-9 px-5 rounded-md cursor-pointer"
-          >
-            Login
-          </Button>
+          {user ? (
+            <Button onClick={handleLogout} variant="destructive" className="hidden md:block h-9 px-5 rounded-md cursor-pointer">
+              Logout
+            </Button>
+          ) : (
+            <Button onClick={() => router.push("/login")} className="hidden md:block h-9 px-5 rounded-md cursor-pointer">
+              Login
+            </Button>
+          )}
           {/* <div onClick={() => router.push("/profile")} className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden border-2 border-indigo-100 hidden md:block">
             <Image
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs9wTNqfggS6zRHeFBirzFKrIi1qBB59mJ-TjAwB1ZVBXUpbqV-1raQggutL5RclM7Ag6Y5ZK693kNh-lc56laZJz2vtxsabVSx0q_uLl-ZY7ivJVvWke5SckXNZTQnZ3jNbTCqZ0J6329ha2VGg8ChO8z8a6NZn7VkY8uM2DYG4iKRdQ799jb2DkZ0bmsBNPWmpHpJ1fh4nxSGJDv5JhxE-9ByddAX8EvhOWoKcLHUWJh1oLCj5pdXuRDhmGL1yzKOB0uxFUyNs2I"
@@ -90,14 +103,10 @@ export default function Navbar() {
               height={40}
               className="object-cover w-full h-full"
             />
-          </div> */}
+          </div>
 
           {/* Hamburger Menu Button */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden flex flex-col gap-1.5 p-2"
-            aria-label="Toggle menu"
-          >
+          <button onClick={toggleMenu} className="md:hidden flex flex-col gap-1.5 p-2" aria-label="Toggle menu">
             <span className={`h-0.5 w-6 bg-slate-600 transition-all ${isOpen ? "rotate-45 translate-y-2" : ""}`}></span>
             <span className={`h-0.5 w-6 bg-slate-600 transition-all ${isOpen ? "opacity-0" : ""}`}></span>
             <span className={`h-0.5 w-6 bg-slate-600 transition-all ${isOpen ? "-rotate-45 -translate-y-2" : ""}`}></span>
@@ -111,9 +120,7 @@ export default function Navbar() {
           <nav className="flex flex-col px-8 py-4 gap-4">
             <Link
               className={`text-sm font-semibold border-b-2 py-2 transition-colors duration-200 ${
-                isActive("/")
-                  ? "text-indigo-600 border-indigo-600"
-                  : "text-slate-600 border-transparent hover:text-indigo-500"
+                isActive("/") ? "text-indigo-600 border-indigo-600" : "text-slate-600 border-transparent hover:text-indigo-500"
               }`}
               href="/"
               onClick={() => setIsOpen(false)}
@@ -122,9 +129,7 @@ export default function Navbar() {
             </Link>
             <Link
               className={`text-sm font-medium py-2 transition-colors border-b-2 duration-200 ${
-                isActive("/books")
-                  ? "text-indigo-600 border-indigo-600"
-                  : "text-slate-600 hover:text-indigo-500 border-transparent"
+                isActive("/books") ? "text-indigo-600 border-indigo-600" : "text-slate-600 hover:text-indigo-500 border-transparent"
               }`}
               href="/books"
               onClick={() => setIsOpen(false)}
@@ -133,9 +138,7 @@ export default function Navbar() {
             </Link>
             <Link
               className={`text-sm font-medium py-2 transition-colors border-b-2 duration-200 ${
-                isActive("/categories")
-                  ? "text-indigo-600 border-indigo-600"
-                  : "text-slate-600 hover:text-indigo-500 border-transparent"
+                isActive("/categories") ? "text-indigo-600 border-indigo-600" : "text-slate-600 hover:text-indigo-500 border-transparent"
               }`}
               href="/categories"
               onClick={() => setIsOpen(false)}
@@ -144,9 +147,7 @@ export default function Navbar() {
             </Link>
             <Link
               className={`text-sm font-medium py-2 transition-colors border-b-2 duration-200 ${
-                isActive("/about")
-                  ? "text-indigo-600 border-indigo-600"
-                  : "text-slate-600 hover:text-indigo-500 border-transparent"
+                isActive("/about") ? "text-indigo-600 border-indigo-600" : "text-slate-600 hover:text-indigo-500 border-transparent"
               }`}
               href="/about"
               onClick={() => setIsOpen(false)}
@@ -155,15 +156,35 @@ export default function Navbar() {
             </Link>
             <Link
               className={`text-sm font-medium py-2 transition-colors border-b-2 duration-200 ${
-                isActive("/contact")
-                  ? "text-indigo-600 border-indigo-600"
-                  : "text-slate-600 hover:text-indigo-500 border-transparent"
+                isActive("/contact") ? "text-indigo-600 border-indigo-600" : "text-slate-600 hover:text-indigo-500 border-transparent"
               }`}
               href="/contact"
               onClick={() => setIsOpen(false)}
             >
               Contact
             </Link>
+            {user ? (
+              <Button
+                onClick={() => {
+                  handleLogout();
+                  setIsOpen(false);
+                }}
+                variant="destructive"
+                className="hidden md:block h-9 px-5 rounded-md cursor-pointer"
+              >
+                Logout
+              </Button>
+            ) : (
+              <button
+                onClick={() => {
+                  router.push("/login");
+                  setIsOpen(false);
+                }}
+                className="text-sm font-medium py-2 transition-colors border-b-2 duration-200 text-slate-600 hover:text-indigo-500 border-transparent text-left"
+              >
+                Login
+              </button>
+            )}
           </nav>
         </div>
       )}

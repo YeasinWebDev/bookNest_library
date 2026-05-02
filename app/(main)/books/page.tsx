@@ -2,60 +2,12 @@
 
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-
-const books = [
-  {
-    title: "The Silent Forest",
-    category: "Fiction",
-    desc: "A haunting journey through the forgotten landscapes of Northern Europe, exploring themes of solitude.",
-    price: 24.99,
-    rating: 4.8,
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuArn_voleU68eKH18kYrsieeaSKRp8q-YzVmsm6TElNOaZAosqwXRvb4C2bJ8RRTMroyXaQMQQ_lSWA8M0MgRhHZxZK39hnRHOFW6QmepyDwyNZVwTY16nKYoN6Dc9qpFQER589uV4wai5HayxqLtaVEwEZizS3bIzLfkhwUjWmodLyVB6ll6xfVW1fpKhea-cSynQHSZ7w6iCSBD0Pxpzib-TWzFPRrTP_EOxpalnGrYP8m564157RpFEWmJqq-F3SaGMB73hlqiDA",
-  },
-  {
-    title: "Principles of Form",
-    category: "Design",
-    desc: "Understanding the foundational elements of modern industrial design and spatial harmony.",
-    price: 45.0,
-    rating: 4.9,
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuA-MWadvutSWOBySRGpuevTR0E2RfFJACcQPwhXWUN4sEf6GXDnSr_QGCzqrE4FolW9zb9DwsdlW1FozH2BlN4qB2hjOvRNs8HqVw2rWHBMC9oZ0XuRiRIwUmSeQNIHkPsDs8zQv1oIAzzinliUBX8yXusSyz-ZG1FlKKNkH8Aa_rTbO3Mtb6qi2Cn6YPHwjnitNHzPUoz7xrFQnAbbAnnZ1AWUbQ-doZnRlgaJPs3bgr9jY2LlOVNWKf-vdvh53d9T60LSCZE6WqFz",
-  },
-  {
-    title: "Echoes of Athens",
-    category: "History",
-    desc: "An immersive retelling of democratic foundations and the philosophical giants of the old world.",
-    price: 19.99,
-    rating: 4.7,
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAbE_21CAfMYfZERGzxRG2otxRNwXtlmxsOZPxYgwHOy-cV34uoUWvjzNeqUSTw9MYropNNHa-iaGlPdsLaqsq_2mANO7qrSLK1Ln5xDuljz5CFrxt0-0O8Exr5k2bfiPXroXicGRRQyZyVmR9Kke8W9IPPLi5m-o8M6iqO-5rjImuM2JIU6R-l3xVrH1wT4fhTzjGySjfQ_odUzSDGvmmX-nhWnL5TOdvF8vbPqgT40tlM0Nn5_mA_Z-xiUZy0idY3a4I_qSThvN92",
-  },
-  {
-    title: "Quantum Horizons",
-    category: "Science",
-    desc: "Demystifying the complex world of subatomic physics for the modern curious mind.",
-    price: 29.0,
-    rating: 4.9,
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCz22OuWdbZa8_wuGCz545T97zKQpz6zeomDXPGe9YG4vVIB5Xt5tKgjEoc51gnsZT-jD34z8rXYbc_wEFhJ-VoJCXe0LAW2hWxhQZ-QwToo-p7cQqsTrwW0KElDM-jNIjFuDikZGg3mmL03x52m5uVPuNvvdIVpJal8yWd5FYe3dPJmdFg4e4WcYeBe8LOHMPtiDzRGLSzffu3VYh3kdxTAkCVlcTJAQtyXq0gitvc7IKXAf7OFoTiTCotu671CxSScdbAjo7AB8a9",
-  },
-  {
-    title: "The Modern Table",
-    category: "Gastronomy",
-    desc: "A visual celebration of farm-to-table cooking and seasonal ingredients from around the world.",
-    price: 32.5,
-    rating: 4.6,
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCaPqlQ8ddzgQriHufta2XtQ0MV10IgzxtIzJdWgYQ97Er52-Wq9CfzC-MRPJjKAdM8HXCBMyULcgf8GpWQcQbgkGM1-ijZCgVGAdRAtZwRKGnTd7xhaRPtcc5NfimRAK6vUhsQAHVzbtrk-R6MTvfzlLR39N71X4FXp2qq39lTmLQGNb1-TgWNY1ys1YRH207zg1Ci4OUd-hBnjpggH3QNddqMT3C0rpcfswwgQNevlWdTl4sR6P1ZlvAPi1kvToJWXQpcDf6ajd-Q",
-  },
-  {
-    title: "Paper Raindrops",
-    category: "Poetry",
-    desc: "A collection of contemporary verse reflecting on urban life and human connection.",
-    price: 15.0,
-    rating: 5.0,
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD4eQtR7UvqoVi88o2D8bWuVZ8LShgxH1K4KB35ZPEuPOq3rQigIV-4EdKhE5qe4N_k_t1O-HvYi4Di1rFwA5v1TkFrXxvoUwLPvIPH4a697dSQIoY_I_Pv4Bn3DyCcUP5PGVMBKpp4Cl-n72b7dm906HGgkfjq7Wc5lHe7DIIQlSBuk55gp0Wfz1WQG6jB3vkOGjmn0h3tP2NMnS1ov2TJnt6uJwQB7DRwx6-d6ZMz_PdOkOhNkdgswG3YGu--6o9G1pK4kXBs6ITo",
-  },
-];
+import { getBooks } from "@/app/api/books/route";
+import { IBook } from "@/app/types";
+import BookCard from "@/components/BookCard";
 
 const categories = ["All Genres", "Fiction", "Non-Fiction", "Philosophy", "Science", "Design", "History", "Poetry", "Gastronomy"];
 
@@ -64,6 +16,8 @@ export default function BooksPageMain() {
   const searchParams = useSearchParams();
 
   const [openFilter, setOpenFilter] = useState(false);
+  const [books, setBooks] = useState<IBook[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
 
   const q = searchParams.get("q") || "";
   const category = searchParams.get("category") || "All Genres";
@@ -71,13 +25,13 @@ export default function BooksPageMain() {
   const maxPrice = Number(searchParams.get("price") || 100);
   const page = Number(searchParams.get("page") || 1);
 
-  const updateParams = (key, value) => {
+  const updateParams = (key: string, value: string | number) => {
     const params = new URLSearchParams(searchParams.toString());
 
     if (!value || value === "All Genres" || value === 0) {
       params.delete(key);
     } else {
-      params.set(key, value);
+      params.set(key, String(value));
     }
 
     if (key !== "page") {
@@ -87,27 +41,20 @@ export default function BooksPageMain() {
     router.push(`?${params.toString()}`);
   };
 
-  const filteredBooks = useMemo(() => {
-    return books
-      .filter((book) => {
-        if (category !== "All Genres" && book.category !== category) return false;
-        if (book.rating < minRating) return false;
-        if (book.price > maxPrice) return false;
+  const filteredBooks = books
+    .filter((book) => {
+      if (category !== "All Genres" && book.category !== category) return false;
+      if (book.rating < minRating) return false;
+      if (book.price > maxPrice) return false;
 
-        if (q) {
-          const search = q.toLowerCase();
-          if (!book.title.toLowerCase().includes(search)) return false;
-        }
+      if (q) {
+        const search = q.toLowerCase();
+        if (!book.title.toLowerCase().includes(search)) return false;
+      }
 
-        return true;
-      })
-      .sort((a, b) => b.rating - a.rating);
-  }, [q, category, minRating, maxPrice]);
-
-  const perPage = 6;
-  const totalPages = Math.ceil(filteredBooks.length / perPage);
-  const start = (page - 1) * perPage;
-  const paginatedBooks = filteredBooks.slice(start, start + perPage);
+      return true;
+    })
+    .sort((a, b) => b.rating - a.rating);
 
   const FilterContent = () => (
     <div className="space-y-6">
@@ -169,6 +116,17 @@ export default function BooksPageMain() {
       </button>
     </div>
   );
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const data = await getBooks(category, q, maxPrice, minRating, page);
+      
+      setBooks(data?.data?.books || []);
+      setTotalPages(data?.data?.totalPages || 1);
+    };
+    fetchBooks();
+  }, [q, category, minRating, maxPrice, page]);
+
 
   return (
     <main className="bg-primary/5 pb-20">
@@ -259,47 +217,8 @@ export default function BooksPageMain() {
           {/* Books */}
           <div className="flex-grow">
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-              {paginatedBooks.map((book, index) => (
-                <div
-                  key={index}
-                  className="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:shadow-xl hover:shadow-indigo-500/10 transition-all duration-300 flex flex-col h-full"
-                >
-                  <div className="relative aspect-[3/4] overflow-hidden">
-                    <Image
-                      src={book.img}
-                      alt={book.title}
-                      width={500}
-                      height={700}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-
-                    <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur text-slate-900 text-xs font-semibold rounded-full shadow-sm">${book.price}</div>
-                  </div>
-
-                  <div className="p-6 flex flex-col flex-grow">
-                    <span className="text-xs font-bold text-indigo-600 tracking-widest uppercase">{book.category}</span>
-
-                    <h3 className="text-xl font-semibold text-slate-900 mt-2">{book.title}</h3>
-
-                    <p className="text-sm text-slate-600 line-clamp-2 mt-2 mb-6">{book.desc}</p>
-
-                    <div className="mt-auto flex items-center justify-between">
-                      <div className="flex items-center gap-1 text-yellow-500">
-                        <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          star
-                        </span>
-                        <span className="text-sm font-medium text-slate-700">{book.rating}</span>
-                      </div>
-
-                      <button
-                        onClick={() => router.push(`/books/${1}`)}
-                        className="px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:opacity-90 active:scale-95 transition-all"
-                      >
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              {filteredBooks.map((book: IBook, index: number) => (
+                <BookCard key={index} book={book} />
               ))}
             </div>
 
