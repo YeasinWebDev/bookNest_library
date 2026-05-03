@@ -5,9 +5,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
-import { getProfile } from "@/app/api/profile/route";
-import { logoutUser } from "@/app/api/auth/route";
 import toast from "react-hot-toast";
+import { logoutUser } from "@/app/actions/auth";
+import { getProfile } from "@/app/actions/profile";
 
 export default function Navbar() {
   const pathname = usePathname();

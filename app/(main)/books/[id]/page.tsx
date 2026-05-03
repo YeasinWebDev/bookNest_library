@@ -1,6 +1,6 @@
 "use client";
 
-import { getBook, getBooks } from "@/app/api/books/route";
+import { getBook, getBooks } from "@/app/actions/books";
 import { IBook } from "@/app/types";
 import BookCard from "@/components/BookCard";
 import Image from "next/image";

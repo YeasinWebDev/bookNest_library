@@ -1,6 +1,6 @@
 "use client";
 
-import { loginUser } from "@/app/api/auth/route";
+import { loginUser } from "@/app/actions/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
