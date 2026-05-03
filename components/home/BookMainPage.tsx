@@ -117,13 +117,23 @@ export default function BooksPageMain() {
     </div>
   );
 
-  useEffect(() => {
+ useEffect(() => {
     const fetchBooks = async () => {
-      const data = await getBooks(category, q, maxPrice, minRating, page);
-      
-      setBooks(data?.data?.books || []);
-      setTotalPages(data?.data?.totalPages || 1);
+      try {
+        const res = await fetch(
+          `/api/books?category=${category}&search=${q}&maxPrice=${maxPrice}&minRating=${minRating}&page=${page}`,
+          { cache: "no-store" }
+        );
+
+        const data = await res.json();
+
+        setBooks(data?.data?.books || []);
+        setTotalPages(data?.data?.totalPages || 1);
+      } catch (err) {
+        console.error("Failed to load books", err);
+      }
     };
+
     fetchBooks();
   }, [q, category, minRating, maxPrice, page]);
 
