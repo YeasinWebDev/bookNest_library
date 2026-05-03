@@ -121,7 +121,7 @@ export default function BooksPageMain() {
     const fetchBooks = async () => {
       try {
         const res = await fetch(
-          `/api/books?category=${category}&search=${q}&maxPrice=${maxPrice}&minRating=${minRating}&page=${page}`,
+          `/api/books?category=${category}&search=${q}&maxPrice=${maxPrice}&minRating=${minRating}&page=${page}&limit=6`,
           { cache: "no-store" }
         );
 
