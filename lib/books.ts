@@ -16,7 +16,7 @@ export const getBooks = async (
   });
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/books?${query.toString()}`,
+    `https://booknest-library-backend.onrender.com/api/books?${query.toString()}`,
     {
       cache: "no-store",
     }
