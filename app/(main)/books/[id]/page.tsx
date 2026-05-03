@@ -8,6 +8,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+export const dynamic = 'force-dynamic';
+
 export default function BookDetailsPage() {
   const { id } = useParams();
   const [books, setBooks] = useState<IBook[]>([]);

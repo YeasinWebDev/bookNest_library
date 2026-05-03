@@ -1,25 +1,20 @@
-import type { Metadata } from "next";
-import "../globals.css";
+"use client";
+
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import { Toaster } from "react-hot-toast";
 
-export const metadata: Metadata = {
-  title: "BookNest",
-  description: "BookNest",
-};
-
-export default function RootLayout({
+export default function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="min-h-full flex flex-col w-full bg-primary/5">
-        <Navbar />
-        {children}
-        <Footer />
-      </body>
-    </html>
+    <>
+      <Navbar />
+      {children}
+      <Footer />
+      <Toaster />
+    </>
   );
 }

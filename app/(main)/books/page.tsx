@@ -8,6 +8,8 @@ import { IBook } from "@/app/types";
 import BookCard from "@/components/BookCard";
 import { getBooks } from "@/lib/books";
 
+export const dynamic = 'force-dynamic';
+
 const categories = ["All Genres", "Fiction", "Non-Fiction", "Philosophy", "Science", "Design", "History", "Poetry", "Gastronomy"];
 
 export default function BooksPageMain() {
