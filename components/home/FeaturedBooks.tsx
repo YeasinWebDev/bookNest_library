@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import BookCard from "../BookCard";
-import { getBooks } from "@/app/actions/books";
+import { getBooks } from "@/lib/books";
 
 export default function FeaturedBooks() {
   const [books, setBooks] = useState<IBook[]>([]);

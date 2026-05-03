@@ -1,8 +1,8 @@
 "use client";
 
-import { getBook, getBooks } from "@/app/actions/books";
 import { IBook } from "@/app/types";
 import BookCard from "@/components/BookCard";
+import { getBook, getBooks } from "@/lib/books";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
