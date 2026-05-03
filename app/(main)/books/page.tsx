@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { IBook } from "@/app/types";
 import BookCard from "@/components/BookCard";
-import { getBooks } from "@/app/actions/books";
+import { getBooks } from "@/lib/books";
 
 const categories = ["All Genres", "Fiction", "Non-Fiction", "Philosophy", "Science", "Design", "History", "Poetry", "Gastronomy"];
 

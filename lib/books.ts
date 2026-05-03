@@ -1,5 +1,3 @@
-"use server";
-
 export const getBooks = async (
   category = "All Genres",
   search = "",
